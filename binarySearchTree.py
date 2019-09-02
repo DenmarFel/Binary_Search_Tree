@@ -1,3 +1,5 @@
+import collections
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -38,10 +40,13 @@ class BinarySearchTree:
             return self._inorder(self.root)
         elif type == 'postorder':
             return self._postorder(self.root)
+        elif type == 'level-order':
+            return self._levelOrder(self.root)
         else:
             'Sorry! Please specify an order type.'
 
     def _preorder(self, root: Node):
+        '''A pre-order (DFS) traversal for a binary tree'''
         values = []
         if root:
             values.append(root.value)
@@ -50,6 +55,7 @@ class BinarySearchTree:
         return values
     
     def _inorder(self, root: Node):
+        '''A in-order (DFS) traversal for a binary tree'''
         values = []
         if root:
             values.extend(self._inorder(root.left))
@@ -58,11 +64,24 @@ class BinarySearchTree:
         return values
     
     def _postorder(self, root: Node):
+        '''A post-order (DFS) traversal for a binary tree'''
         values = []
         if root:
             values.extend(self._postorder(root.left))
             values.extend(self._postorder(root.right))
             values.append(root.value)
+        return values
+
+    def _levelOrder(self, root: Node):
+        '''A level-order (BFS) traversal for a binary tree'''
+        values = []
+        queqe = collections.deque([])
+        current = root
+        while current:
+            values.append(current.value)
+            queqe.append(current.left)
+            queqe.append(current.right)
+            current = queqe.popleft()
         return values
 
     def getMaxDepth(self):
@@ -73,6 +92,8 @@ class BinarySearchTree:
             return 0
         else:
             return max(self._getMaxDepth(root.left), self._getMaxDepth(root.right)) + 1
+            
+
     
 
             
@@ -94,5 +115,6 @@ a.add(9)
 print(a.getOrder('preorder'))
 print(a.getOrder('inorder'))
 print(a.getOrder('postorder'))
+print(a.getOrder('level-order'))
 print(a.getOrder('order'))
 print(a.getMaxDepth())
